@@ -33,5 +33,7 @@ private:
 
     juce::Label captureIniStatusLabel;
 
+    juce::Label captureFmt;
+
     int runTimes = 0;
 };

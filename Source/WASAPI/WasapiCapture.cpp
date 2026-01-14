@@ -16,9 +16,8 @@ WasapiCapture::WasapiCapture(std::atomic<HRESULT>& isRunning)
 }
 
 WasapiCapture::~WasapiCapture()
-{   
-    if (hTask)
-    {
+{
+    if (hTask) {
         AvRevertMmThreadCharacteristics(hTask);
     }
     if (hCaptureEvent) {
@@ -35,10 +34,6 @@ WasapiCapture::~WasapiCapture()
         device->Release();
     if (enumerator)
         enumerator->Release();
-
-
-
-
 }
 
 void WasapiCapture::initialize()
@@ -131,15 +126,62 @@ void WasapiCapture::initialize()
         failReason.store(9);
         return;
     }
-
-    
 }
 
 void WasapiCapture::startCapture()
 {
     if (SUCCEEDED(m_isRunning.load())) {
+        
         while (true) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            DWORD waitResult = WaitForSingleObject(hCaptureEvent, 2000);
+            if (waitResult != WAIT_OBJECT_0) {
+                break;
+            }
+            failReason.store(13);
+
+            UINT32 packetFrames = 0;
+            m_isRunning.store(captureClient->GetNextPacketSize(&packetFrames));
+
+            if (FAILED(m_isRunning.load())) {
+                failReason.store(10);
+                continue;
+            }
+
+            m_isRunning.store(captureClient->GetBuffer(
+                &pData,
+                &numFramesToRead,
+                &silenceFlag,
+                nullptr,
+                nullptr));
+
+            if (FAILED(m_isRunning.load())) {
+                failReason.store(11);
+                continue;
+            }
+
+            double sum = 0.0;
+            UINT64 count = 0;
+
+            float* samples = reinterpret_cast<float*>(pData);
+
+            for (UINT32 i = 0; i < numFramesToRead; ++i) {
+                for (UINT32 ch = 0; ch < capChannels; ++ch) {
+                    float s = samples[i * capChannels + ch];
+                    sum += std::abs(s);
+                    ++count;
+                }
+            }
+
+            double avg = sum / count; // 0.0 ~ 1.0
+            capturedVolume.store(avg);
+
+
+            m_isRunning.store(captureClient->ReleaseBuffer(numFramesToRead));
+
+            if (FAILED(m_isRunning.load())) {
+                failReason.store(14);
+                continue;
+            }
         }
     }
 }

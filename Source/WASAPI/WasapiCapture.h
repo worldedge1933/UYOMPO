@@ -27,10 +27,13 @@ private:
     IMMDevice* device = nullptr;
     IAudioClient* audioClient = nullptr;
     IAudioCaptureClient* captureClient = nullptr;
-    WAVEFORMATEX* mixFmt = nullptr;
+
     std::atomic<HRESULT>& m_isRunning;
     HANDLE hCaptureEvent = nullptr;
     HANDLE hTask = nullptr;
+    BYTE* pData = nullptr;
+    UINT32 numFramesToRead = 0;
+    DWORD silenceFlag = 0;
 
 public:
     WasapiCapture(std::atomic<HRESULT>& isRunning);
@@ -38,10 +41,12 @@ public:
     void initialize();
     void startCapture();
     void stopCapture();
-
+    WAVEFORMATEX* mixFmt = nullptr;
     uint32_t capSampleRate;
     uint16_t capChannels;
 
     REFERENCE_TIME bufferDuration = 10 * 100000;
     std::atomic<int> failReason { 0 };
+
+    std::atomic<FLOAT> capturedVolume = { 1 };
 };
