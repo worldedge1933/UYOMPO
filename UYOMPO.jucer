@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="mkKSod" name="UYOMPO" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+  <MAINGROUP id="j95wsF" name="UYOMPO">
+    <GROUP id="{447E88F3-961E-CEC3-A2A3-CF96B6E82BF2}" name="Source">
+      <GROUP id="{F35C456A-4112-9ED5-EF90-34E38E7B4EAC}" name="WASAPI">
+        <FILE id="OMT4eH" name="WasapiCapture.cpp" compile="1" resource="0"
+              file="Source/WASAPI/WasapiCapture.cpp"/>
+        <FILE id="orvKDl" name="WasapiCapture.h" compile="0" resource="0" file="Source/WASAPI/WasapiCapture.h"/>
+      </GROUP>
+      <FILE id="KXGlgY" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="qrMco9" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="wIYL2I" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="W40z45" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2022 targetFolder="Builds/VisualStudio2022">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="UYOMPO"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="UYOMPO"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="D:/dev/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="D:/dev/JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2022>
+  </EXPORTFORMATS>
+</JUCERPROJECT>
