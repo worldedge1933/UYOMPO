@@ -54,10 +54,9 @@ public:
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
     std::atomic<HRESULT> _isRunning { E_FAIL };
+    std::unique_ptr<WasapiCapture> wasapiCapture;
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UYOMPOAudioProcessor)
-
-    std::unique_ptr<WasapiCapture> wasapiCapture;
 };

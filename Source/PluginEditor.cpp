@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <string>
 
 //==============================================================================
 UYOMPOAudioProcessorEditor::UYOMPOAudioProcessorEditor (UYOMPOAudioProcessor& p)
@@ -18,7 +19,7 @@ UYOMPOAudioProcessorEditor::UYOMPOAudioProcessorEditor (UYOMPOAudioProcessor& p)
     addAndMakeVisible(captureIniStatusLabel);
 
     setSize (400, 300);
-    startTimerHz(20);
+    startTimerHz(10);
 }
 
 UYOMPOAudioProcessorEditor::~UYOMPOAudioProcessorEditor()
@@ -46,9 +47,19 @@ void UYOMPOAudioProcessorEditor::resized()
 
 void UYOMPOAudioProcessorEditor::timerCallback()
 {
-    captureIniStatusLabel.setText("Failed init capture", juce::dontSendNotification);
+    if (audioProcessor.wasapiCapture == nullptr)
+    {
+        runTimes++;
+        captureIniStatusLabel.setText("runTime: " + std::to_string(runTimes) + " Initializing capture...", juce::dontSendNotification);
+        return;
+    }
     if (SUCCEEDED(audioProcessor._isRunning.load()))
     {
         captureIniStatusLabel.setText("Succeed init capture", juce::dontSendNotification);
+    }
+
+    if (FAILED(audioProcessor._isRunning.load()))
+    {
+        captureIniStatusLabel.setText("Failed init capture, reason: " + std::to_string(audioProcessor.wasapiCapture->failReason), juce::dontSendNotification);
     }
 }

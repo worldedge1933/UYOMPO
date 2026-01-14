@@ -16,9 +16,10 @@
 #include <Audioclient.h>
 #include <Mmdeviceapi.h>
 #include <Windows.h>
+#include <atomic>
 #include <avrt.h>
 #include <stdio.h>
-#include <atomic>
+#include <thread>
 
 class WasapiCapture {
 private:
@@ -28,6 +29,8 @@ private:
     IAudioCaptureClient* captureClient = nullptr;
     WAVEFORMATEX* mixFmt = nullptr;
     std::atomic<HRESULT>& m_isRunning;
+    HANDLE hCaptureEvent = nullptr;
+    HANDLE hTask = nullptr;
 
 public:
     WasapiCapture(std::atomic<HRESULT>& isRunning);
@@ -35,6 +38,10 @@ public:
     void initialize();
     void startCapture();
     void stopCapture();
-    void begin(); // Private member variables and methods for WASAPI capture
-                  // implementation
+
+    uint32_t capSampleRate;
+    uint16_t capChannels;
+
+    REFERENCE_TIME bufferDuration = 10 * 100000;
+    std::atomic<int> failReason { 0 };
 };
