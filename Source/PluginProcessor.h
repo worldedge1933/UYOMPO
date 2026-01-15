@@ -11,6 +11,7 @@
 #include "WASAPI/WasapiCapture.h"
 #include <JuceHeader.h>
 #include <atomic>
+#include "SharedRingBuffer/SharedRingBuffer.h"
 
 //==============================================================================
 /**
@@ -55,6 +56,8 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override;
     std::atomic<HRESULT> _isRunning { E_FAIL };
     std::unique_ptr<WasapiCapture> wasapiCapture;
+    SharedRingBuffer sharedRingBuffer; // 10 seconds buffer at 48kHz, stereo
+    
 
 private:
     //==============================================================================

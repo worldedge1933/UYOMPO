@@ -4,6 +4,12 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="j95wsF" name="UYOMPO">
     <GROUP id="{447E88F3-961E-CEC3-A2A3-CF96B6E82BF2}" name="Source">
+      <GROUP id="{4E994422-43ED-CA0E-763D-48FF3168A4A2}" name="SharedRingBuffer">
+        <FILE id="pCBwx1" name="SharedRingBuffer.cpp" compile="1" resource="0"
+              file="Source/SharedRingBuffer/SharedRingBuffer.cpp"/>
+        <FILE id="RYaCz5" name="SharedRingBuffer.h" compile="0" resource="0"
+              file="Source/SharedRingBuffer/SharedRingBuffer.h"/>
+      </GROUP>
       <GROUP id="{F35C456A-4112-9ED5-EF90-34E38E7B4EAC}" name="WASAPI">
         <FILE id="OMT4eH" name="WasapiCapture.cpp" compile="1" resource="0"
               file="Source/WASAPI/WasapiCapture.cpp"/>

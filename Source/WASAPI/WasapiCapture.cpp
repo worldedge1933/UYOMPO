@@ -10,8 +10,9 @@
 
 #include "WasapiCapture.h"
 
-WasapiCapture::WasapiCapture(std::atomic<HRESULT>& isRunning)
+WasapiCapture::WasapiCapture(std::atomic<HRESULT>& isRunning, SharedRingBuffer* m_ringBuffer)
     : m_isRunning(isRunning)
+    , m_ringBuffer(m_ringBuffer)
 {
 }
 
@@ -131,7 +132,7 @@ void WasapiCapture::initialize()
 void WasapiCapture::startCapture()
 {
     if (SUCCEEDED(m_isRunning.load())) {
-        
+
         while (true) {
             DWORD waitResult = WaitForSingleObject(hCaptureEvent, 2000);
             if (waitResult != WAIT_OBJECT_0) {
@@ -144,6 +145,10 @@ void WasapiCapture::startCapture()
 
             if (FAILED(m_isRunning.load())) {
                 failReason.store(10);
+                continue;
+            }
+
+            if (packetFrames == 0) {
                 continue;
             }
 
@@ -172,9 +177,10 @@ void WasapiCapture::startCapture()
                 }
             }
 
+            m_ringBuffer->pushFromCapClient(samples, numFramesToRead);
+
             double avg = sum / count; // 0.0 ~ 1.0
             capturedVolume.store(avg);
-
 
             m_isRunning.store(captureClient->ReleaseBuffer(numFramesToRead));
 

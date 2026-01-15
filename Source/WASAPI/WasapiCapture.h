@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <thread>
 
+#include "../SharedRingBuffer/SharedRingBuffer.h"
+
 class WasapiCapture {
 private:
     IMMDeviceEnumerator* enumerator = nullptr;
@@ -35,8 +37,10 @@ private:
     UINT32 numFramesToRead = 0;
     DWORD silenceFlag = 0;
 
+    SharedRingBuffer* m_ringBuffer = nullptr;
+
 public:
-    WasapiCapture(std::atomic<HRESULT>& isRunning);
+    WasapiCapture(std::atomic<HRESULT>& isRunning, SharedRingBuffer* m_ringBuffer);
     ~WasapiCapture();
     void initialize();
     void startCapture();
@@ -45,7 +49,7 @@ public:
     uint32_t capSampleRate;
     uint16_t capChannels;
 
-    REFERENCE_TIME bufferDuration = 10 * 100000;
+    REFERENCE_TIME bufferDuration = 10 * 1000 * 10;
     std::atomic<int> failReason { 0 };
 
     std::atomic<FLOAT> capturedVolume = { 1 };

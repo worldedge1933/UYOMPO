@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "SharedRingBuffer/SharedRingBuffer.h"
 
 //==============================================================================
 UYOMPOAudioProcessor::UYOMPOAudioProcessor()
@@ -19,12 +20,13 @@ UYOMPOAudioProcessor::UYOMPOAudioProcessor()
 #endif
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      )
+              )
+    , sharedRingBuffer(960, 2)
 #endif
 {
 
     std::thread([this]() {
-        this->wasapiCapture = std::make_unique<WasapiCapture>(this->_isRunning);
+        this->wasapiCapture = std::make_unique<WasapiCapture>(this->_isRunning, &this->sharedRingBuffer);
         wasapiCapture->initialize();
         wasapiCapture->startCapture();
     }).detach();
