@@ -57,7 +57,8 @@ public:
     std::atomic<HRESULT> _isRunning { E_FAIL };
     std::unique_ptr<WasapiCapture> wasapiCapture;
     SharedRingBuffer sharedRingBuffer; // 10 seconds buffer at 48kHz, stereo
-    
+    std::atomic<int> juceBufferSize { 0 };
+    std::atomic<int> juceSampleRate { 0 };
 
 private:
     //==============================================================================

@@ -148,6 +148,8 @@ void WasapiCapture::startCapture()
                 continue;
             }
 
+            capturedFrames.store(packetFrames);
+
             if (packetFrames == 0) {
                 continue;
             }

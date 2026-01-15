@@ -11,15 +11,20 @@
 #include <string>
 
 //==============================================================================
-UYOMPOAudioProcessorEditor::UYOMPOAudioProcessorEditor (UYOMPOAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+UYOMPOAudioProcessorEditor::UYOMPOAudioProcessorEditor(UYOMPOAudioProcessor& p)
+    : AudioProcessorEditor(&p)
+    , audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     addAndMakeVisible(captureIniStatusLabel);
-    addAndMakeVisible(captureFmt);
+    addAndMakeVisible(failReasonLabel);
+    addAndMakeVisible(captureFmtLabel);
+    addAndMakeVisible(capturedFramesLabel);
+    addAndMakeVisible(juceSampleRate);
+    addAndMakeVisible(juceBufferSize);
 
-    setSize (800, 300);
+    setSize(500, 500);
     startTimerHz(10);
 }
 
@@ -28,42 +33,54 @@ UYOMPOAudioProcessorEditor::~UYOMPOAudioProcessorEditor()
 }
 
 //==============================================================================
-void UYOMPOAudioProcessorEditor::paint (juce::Graphics& g)
+void UYOMPOAudioProcessorEditor::paint(juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setColour(juce::Colours::white);
+    g.setFont(juce::FontOptions(15.0f));
 }
 
 void UYOMPOAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    int beginHeight = 10;
+    captureIniStatusLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
 
-    captureIniStatusLabel.setBounds(10, 10, getWidth() - 20, 20);
-    captureFmt.setBounds(10, 40, getWidth() - 20, getHeight() - 50);
+    beginHeight += 40;
+    failReasonLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
+
+    beginHeight += 40;
+    captureFmtLabel.setBounds(10, beginHeight, getWidth() - 20, 180);
+
+    beginHeight += 200;
+    capturedFramesLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
+
+    beginHeight += 40;
+    juceBufferSize.setBounds(10, beginHeight, getWidth() - 20, 20);
+
+    beginHeight += 40;
+    juceSampleRate.setBounds(10, beginHeight, getWidth() - 20, 20);
 }
 
 void UYOMPOAudioProcessorEditor::timerCallback()
 {
-    if (audioProcessor.wasapiCapture == nullptr)
-    {
+    if (audioProcessor.wasapiCapture == nullptr) {
         runTimes++;
         captureIniStatusLabel.setText("runTime: " + std::to_string(runTimes) + " Initializing capture...", juce::dontSendNotification);
         return;
     }
-    if (SUCCEEDED(audioProcessor._isRunning.load()))
-    {
-        captureIniStatusLabel.setText("Succeed init capture, now volume is " + std::to_string(audioProcessor.wasapiCapture->capturedVolume) + "fail flag is " + std::to_string(audioProcessor.wasapiCapture->failReason), juce::dontSendNotification);
+    if (SUCCEEDED(audioProcessor._isRunning.load())) {
+        captureIniStatusLabel.setText("Succeed init capture, now volume is " + std::to_string(audioProcessor.wasapiCapture->capturedVolume), juce::dontSendNotification);
     }
 
-    if (FAILED(audioProcessor._isRunning.load()))
-    {
-        captureIniStatusLabel.setText("Failed init capture, reason: " + std::to_string(audioProcessor.wasapiCapture->failReason), juce::dontSendNotification);
+    if (FAILED(audioProcessor._isRunning.load())) {
+        captureIniStatusLabel.setText("Failed init capture", juce::dontSendNotification);
     }
+
+    failReasonLabel.setText("Fail flag is: " + std::to_string(audioProcessor.wasapiCapture->failReason), juce::dontSendNotification);
 
     auto* fmt = audioProcessor.wasapiCapture->mixFmt;
 
@@ -92,5 +109,11 @@ void UYOMPOAudioProcessorEditor::timerCallback()
             text += "SubFormat = OTHER\n";
     }
 
-    captureFmt.setText(text, juce::dontSendNotification);
+    capturedFramesLabel.setText("Captured Frames: " + std::to_string(audioProcessor.wasapiCapture->capturedFrames.load()), juce::dontSendNotification);
+
+    captureFmtLabel.setText(text, juce::dontSendNotification);
+
+    juceBufferSize.setText("Juce Audio Buffer Size: " + std::to_string(audioProcessor.juceBufferSize.load()), juce::dontSendNotification);
+
+    juceSampleRate.setText("Juce Audio Sample Rate: " + std::to_string(audioProcessor.juceSampleRate.load()), juce::dontSendNotification);
 }

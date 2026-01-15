@@ -21,7 +21,7 @@ UYOMPOAudioProcessor::UYOMPOAudioProcessor()
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
               )
-    , sharedRingBuffer(960, 2)
+    , sharedRingBuffer(1200, 2)
 #endif
 {
 
@@ -104,6 +104,9 @@ void UYOMPOAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     // Use this method as the place to do any pre-playback
     if (SUCCEEDED(this->_isRunning.load())) {
     }
+
+    juceBufferSize.store(samplesPerBlock);
+    juceSampleRate.store(static_cast<int>(sampleRate));
 }
 
 void UYOMPOAudioProcessor::releaseResources()

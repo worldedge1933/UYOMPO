@@ -53,4 +53,6 @@ public:
     std::atomic<int> failReason { 0 };
 
     std::atomic<FLOAT> capturedVolume = { 1 };
+
+    std::atomic<int> capturedFrames = { 0 };
 };
