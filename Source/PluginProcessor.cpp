@@ -21,7 +21,7 @@ UYOMPOAudioProcessor::UYOMPOAudioProcessor()
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
               )
-    , sharedRingBuffer(1200, 2)
+    , sharedRingBuffer(480*3, 2)
 #endif
 {
 
@@ -180,12 +180,12 @@ void UYOMPOAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
     
-    numReady.store(sharedRingBuffer.getNumReady());
-    if (numReady.load() < maxInNeeded * 1.1) {
-        speedRatio -= 0.0001;
-    } else {
-        speedRatio += 0.0001;
-    }
+    //numReady.store(sharedRingBuffer.getNumReady());
+    //if (numReady.load() < maxInNeeded * 1.1) {
+    //    speedRatio -= 0.0001;
+    //} else {
+    //    speedRatio += 0.0001;
+    //}
 
     sharedRingBuffer.popToAudioProcessBlock(tempBuffer, (int)(buffer.getNumSamples() * speedRatio));
 
