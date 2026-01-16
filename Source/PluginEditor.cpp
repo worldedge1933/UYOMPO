@@ -50,8 +50,10 @@ void UYOMPOAudioProcessorEditor::resized()
     int beginHeight = 10;
     captureIniStatusLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
 
+    #if JUCE_DEBUG
     beginHeight += 40;
     failReasonLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
+    #endif
 
     beginHeight += 40;
     captureFmtLabel.setBounds(10, beginHeight, getWidth() - 20, 180);
@@ -65,8 +67,10 @@ void UYOMPOAudioProcessorEditor::resized()
     beginHeight += 40;
     juceSampleRate.setBounds(10, beginHeight, getWidth() - 20, 20);
 
+    #if JUCE_DEBUG
     beginHeight += 40;
     ringBufferReadyLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
+    #endif
 }
 
 void UYOMPOAudioProcessorEditor::timerCallback()
