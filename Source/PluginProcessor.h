@@ -59,8 +59,17 @@ public:
     SharedRingBuffer sharedRingBuffer; // 10 seconds buffer at 48kHz, stereo
     std::atomic<int> juceBufferSize { 0 };
     std::atomic<int> juceSampleRate { 0 };
+    std::atomic<int> numReady { 0 };
 
 private:
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UYOMPOAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UYOMPOAudioProcessor);
+
+    juce::AudioBuffer<float> tempBuffer;
+
+    std::vector<juce::LagrangeInterpolator> interpolators;
+    double hostRate = 44100.0;
+    double wasapiRate = 48000;
+    double speedRatio = 48000.0 / 44100.0;
+    int maxInNeeded = 0;
 };

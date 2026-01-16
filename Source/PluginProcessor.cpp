@@ -107,6 +107,23 @@ void UYOMPOAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     juceBufferSize.store(samplesPerBlock);
     juceSampleRate.store(static_cast<int>(sampleRate));
+
+    tempBuffer.setSize(getTotalNumOutputChannels(), samplesPerBlock * 2);
+
+    hostRate = sampleRate;
+    if (wasapiCapture == nullptr || wasapiCapture->mixFmt == nullptr) {
+        wasapiRate = 48000.0;
+    } else {
+        wasapiRate = wasapiCapture->mixFmt->nSamplesPerSec;
+    }
+    speedRatio = wasapiRate / hostRate;
+    maxInNeeded = static_cast<int>(std::ceil(speedRatio * samplesPerBlock)) + 2;
+
+    interpolators.clear();
+    interpolators.resize(getTotalNumOutputChannels());
+    for (auto& interp : interpolators) {
+        interp.reset();
+    }
 }
 
 void UYOMPOAudioProcessor::releaseResources()
@@ -162,11 +179,26 @@ void UYOMPOAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    
+    numReady.store(sharedRingBuffer.getNumReady());
+    if (numReady.load() < maxInNeeded * 1.1) {
+        speedRatio -= 0.0001;
+    } else {
+        speedRatio += 0.0001;
+    }
+
+    sharedRingBuffer.popToAudioProcessBlock(tempBuffer, (int)(buffer.getNumSamples() * speedRatio));
+
     for (int channel = 0; channel < totalNumInputChannels; ++channel) {
         auto* channelData = buffer.getWritePointer(channel);
+        interpolators[channel].process(speedRatio,
+            tempBuffer.getReadPointer(channel),
+            channelData,
+            buffer.getNumSamples());
 
         // ..do something to the data...
     }
+    
 }
 
 //==============================================================================

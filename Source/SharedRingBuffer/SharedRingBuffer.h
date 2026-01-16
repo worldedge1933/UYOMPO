@@ -18,11 +18,13 @@ private:
     int numChannels = 0;
     size_t capacity = 0;
 
-
 public:
     SharedRingBuffer(size_t capacity, int numChannels);
     ~SharedRingBuffer();
     int pushFromCapClient(const float* data, int frameSize);
-    int popToAudioProcessBlock(void* data, int frameSize);
-    
+    int popToAudioProcessBlock(juce::AudioBuffer<float>& dst, int frameSize);
+    int getNumReady() const
+    {
+        return fifo.getNumReady();
+    }
 };

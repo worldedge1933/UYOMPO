@@ -23,6 +23,7 @@ UYOMPOAudioProcessorEditor::UYOMPOAudioProcessorEditor(UYOMPOAudioProcessor& p)
     addAndMakeVisible(capturedFramesLabel);
     addAndMakeVisible(juceSampleRate);
     addAndMakeVisible(juceBufferSize);
+    addAndMakeVisible(ringBufferReadyLabel);
 
     setSize(500, 500);
     startTimerHz(10);
@@ -63,6 +64,9 @@ void UYOMPOAudioProcessorEditor::resized()
 
     beginHeight += 40;
     juceSampleRate.setBounds(10, beginHeight, getWidth() - 20, 20);
+
+    beginHeight += 40;
+    ringBufferReadyLabel.setBounds(10, beginHeight, getWidth() - 20, 20);
 }
 
 void UYOMPOAudioProcessorEditor::timerCallback()
@@ -116,4 +120,6 @@ void UYOMPOAudioProcessorEditor::timerCallback()
     juceBufferSize.setText("Juce Audio Buffer Size: " + std::to_string(audioProcessor.juceBufferSize.load()), juce::dontSendNotification);
 
     juceSampleRate.setText("Juce Audio Sample Rate: " + std::to_string(audioProcessor.juceSampleRate.load()), juce::dontSendNotification);
+
+    ringBufferReadyLabel.setText("Ring Buffer Ready Frames: " + std::to_string(audioProcessor.numReady.load()), juce::dontSendNotification);
 }

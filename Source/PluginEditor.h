@@ -37,6 +37,7 @@ private:
     juce::Label capturedFramesLabel;
     juce::Label juceSampleRate;
     juce::Label juceBufferSize;
+    juce::Label ringBufferReadyLabel;
     
 
     int runTimes = 0;
