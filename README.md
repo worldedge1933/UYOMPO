@@ -47,7 +47,7 @@ In many DAW setups, audio I/O is tied to an external audio interface, which can 
 
 1. Add a “Replace/Mix” mode switch to either replace the track audio or mix the captured audio with the track.
 2. Add output gain control.
-~~3. Improve resampling: fix crackling/popping when the project sample rate differs from the system input sample rate.~~ (Completed)
+3. ~~Improve resampling: fix crackling/popping when the project sample rate differs from the system input sample rate.~~ (Completed)
 4. Add adaptive noise-reduction tailored to suppress common laptop fan and mechanical noise near built-in microphones.
 5. Add support for audio device hot-plugging.
 
@@ -136,7 +136,7 @@ UYOMPO 是一款基于 JUCE 框架的 VST3 音频插件。本仓库包含用于�
 
 1. 增加“Replace/Mix”模式切换：支持替换轨道音频，或将捕获音频与轨道音频混合。
 2. 增加输出增益控制。
-~~3. 优化重采样：解决工程采样率与系统输入采样率不一致时的爆音问题。~~（已完成）
+3. ~~优化重采样：解决工程采样率与系统输入采样率不一致时的爆音问题。~~（已完成）
 4. 增加针对笔记本内置麦克风附近风扇与机械噪声的自适应降噪支持。
 5. 增加对音频设备热插拔的支持。
 
