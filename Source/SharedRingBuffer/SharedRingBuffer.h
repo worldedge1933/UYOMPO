@@ -22,9 +22,15 @@ public:
     SharedRingBuffer(size_t capacity, int numChannels);
     ~SharedRingBuffer();
     int pushFromCapClient(const float* data, int frameSize);
+    int copyToAudioProcessBlock(juce::AudioBuffer<float>& dst, int frameSize);
     int popToAudioProcessBlock(juce::AudioBuffer<float>& dst, int frameSize);
     int getNumReady() const
     {
         return fifo.getNumReady();
+    }
+
+    void finishedRead(int numItems)
+    {
+        fifo.finishedRead(numItems);
     }
 };
