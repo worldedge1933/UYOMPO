@@ -34,7 +34,7 @@ In many DAW setups, audio I/O is tied to an external audio interface, which can 
 
 1. Windows only. Requires the WASAPI backend.
 2. Current behavior is “replace the track’s audio with the captured microphone stream.” Insert it on an empty track and place it at the beginning of the plugin chain to avoid overwriting other audio.
-3. Resampling support is limited. For best quality, keep the host project sample rate consistent with the system default input device sample rate.
+3. Resampling is supported. However, we still recommend keeping the host project and audio interface sample rates consistent with the system default input device sample rate to reduce plugin CPU load and avoid unknown issues.
 4. The plugin captures the system **default input device**. Make sure the default input device is set correctly in Windows sound settings. After changing audio settings or doing other system audio operations, Windows may switch the default device automatically.
 5. Hot-plugging is not supported yet. If you change the default input device or modify the DAW’s audio device settings during use, restart the host so the plugin can re-bind to the new default input.
 6. There are currently no adjustable parameters, so the UI is intentionally minimal and shows only basic information (e.g., input sample rate).
@@ -47,8 +47,9 @@ In many DAW setups, audio I/O is tied to an external audio interface, which can 
 
 1. Add a “Replace/Mix” mode switch to either replace the track audio or mix the captured audio with the track.
 2. Add output gain control.
-3. Improve resampling quality when the project sample rate differs from the system input sample rate.
-4. Add support for audio device hot-plugging.
+~~3. Improve resampling: fix crackling/popping when the project sample rate differs from the system input sample rate.~~ (Completed)
+4. Add adaptive noise-reduction tailored to suppress common laptop fan and mechanical noise near built-in microphones.
+5. Add support for audio device hot-plugging.
 
 <a id="en-build"></a>
 
@@ -122,7 +123,7 @@ UYOMPO 是一款基于 JUCE 框架的 VST3 音频插件。本仓库包含用于�
 
 1. 仅支持 Windows 平台，依赖 WASAPI 音频后端。
 2. 当前工作模式为“用麦克风采集数据替换某一轨道的音频”。请将其插入到空轨道，并放在插件链最前端，以避免覆盖其他音频内容。
-3. 目前对重采样的支持有限。建议宿主工程采样率与系统默认输入设备采样率保持一致，以避免音质问题。
+3. 支持重采样。但仍建议将宿主工程及声卡采样率与系统默认输入设备采样率保持一致，以减小插件运算量并避免未知问题。
 4. 插件捕获的是系统“默认输入设备”。请在 Windows 音频设置中正确配置默认输入；在更改声卡设置或进行其他系统音频操作后，Windows 可能会自动切换默认输入设备。
 5. 暂不支持音频设备热插拔。使用过程中如更改了默认输入设备，或调整了 DAW 的音频接口设置，建议重启宿主程序以确保插件重新绑定到新的默认输入设备。
 6. 当前版本暂无可调参数，因此界面较为简洁，仅展示基础信息（如系统输入采样率等）。
@@ -135,8 +136,9 @@ UYOMPO 是一款基于 JUCE 框架的 VST3 音频插件。本仓库包含用于�
 
 1. 增加“Replace/Mix”模式切换：支持替换轨道音频，或将捕获音频与轨道音频混合。
 2. 增加输出增益控制。
-3. 优化重采样：提升工程采样率与系统输入采样率不一致时的音质。
-4. 增加对音频设备热插拔的支持。
+~~3. 优化重采样：解决工程采样率与系统输入采样率不一致时的爆音问题。~~（已完成）
+4. 增加针对笔记本内置麦克风附近风扇与机械噪声的自适应降噪支持。
+5. 增加对音频设备热插拔的支持。
 
 <a id="zh-build"></a>
 
